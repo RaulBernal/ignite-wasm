@@ -1,0 +1,17 @@
+syntax = "proto3";
+package ignitewasm.ignitewasm;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "ignitewasm/ignitewasm/params.proto";
+
+option go_package = "ignite-wasm/x/ignitewasm/types";
+
+// GenesisState defines the ignitewasm module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
