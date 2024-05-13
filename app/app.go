@@ -76,6 +76,10 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
 	ignitewasmmodulekeeper "ignite-wasm/x/ignitewasm/keeper"
+
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	"ignite-wasm/docs"
@@ -141,6 +145,11 @@ type App struct {
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
 
 	IgnitewasmKeeper ignitewasmmodulekeeper.Keeper
+
+	// CosmWasm
+	WasmKeeper       wasmkeeper.Keeper
+	ScopedWasmKeeper capabilitykeeper.ScopedKeeper
+
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	// simulation manager
@@ -333,6 +342,7 @@ func New(
 
 	app.ModuleManager.RegisterInvariants(app.CrisisKeeper)
 
+	app.RegisterUpgradeHandlers()
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	//
 	// NOTE: this is not required apps that don't use the simulator for fuzz testing transactions
@@ -357,7 +367,9 @@ func New(
 		return nil, err
 	}
 
-	return app, nil
+	return app, app.WasmKeeper.
+		InitializePinnedCodes(app.NewUncachedContext(true, tmproto.Header{}))
+
 }
 
 // LegacyAmino returns App's amino codec.
