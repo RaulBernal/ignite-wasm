@@ -2,15 +2,14 @@ package app
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/types/module"
 
 	storetypes "cosmossdk.io/store/types"
 
 	upgradetypes "cosmossdk.io/x/upgrade/types"
-
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 )
 
 // RegisterUpgradeHandlers registers upgrade handlers.
@@ -29,18 +28,9 @@ func (app *App) StickyFingers(_ upgradetypes.Plan) {
 		planName,
 		func(ctx context.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 			app.Logger().Info("Cosmos-SDK v0.50.x is here...")
-			// Print the modules with their respective ver.
-			for moduleName, version := range fromVM {
-				app.Logger().Info(fmt.Sprintf("Module: %s, Version: %d", moduleName, version))
 
-			}
-			versionMap, err := app.ModuleManager.RunMigrations(ctx, app.Configurator(), fromVM)
-			if err != nil {
-				return nil, err
-			}
-			app.Logger().Info(fmt.Sprintf("post migrate version map: %v", versionMap))
-			// return app.ModuleManager.RunMigrations(ctx, app.Configurator(), fromVM)
-			return versionMap, err
+			return nil, nil //app.ModuleManager.RunMigrations(ctx, app.Configurator(), fromVM)
+
 		},
 	)
 	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
@@ -54,6 +44,7 @@ func (app *App) StickyFingers(_ upgradetypes.Plan) {
 				// circuittypes.ModuleName,
 				// ibcfeetypes.ModuleName,
 				// nft.ModuleName,
+				consensusparamtypes.StoreKey,
 				wasmtypes.ModuleName,
 			},
 		}
