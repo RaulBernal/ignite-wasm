@@ -29,7 +29,7 @@ func (app *App) StickyFingers(_ upgradetypes.Plan) {
 		func(ctx context.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 			app.Logger().Info("Cosmos-SDK v0.50.x is here...")
 
-			return nil, nil //app.ModuleManager.RunMigrations(ctx, app.Configurator(), fromVM)
+			return app.ModuleManager.RunMigrations(ctx, app.Configurator(), fromVM)
 
 		},
 	)
