@@ -9,7 +9,7 @@ import (
 
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
-	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
+	// consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 )
 
 // RegisterUpgradeHandlers registers upgrade handlers.
@@ -44,7 +44,7 @@ func (app *App) StickyFingers(_ upgradetypes.Plan) {
 				// circuittypes.ModuleName,
 				// ibcfeetypes.ModuleName,
 				// nft.ModuleName,
-				consensusparamtypes.StoreKey,
+				// consensusparamtypes.StoreKey,
 				wasmtypes.ModuleName,
 			},
 		}
