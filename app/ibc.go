@@ -154,6 +154,9 @@ func (app *App) registerIBCModules(appOpts servertypes.AppOptions) error {
 
 	icaHostIBCModule := ibcfee.NewIBCMiddleware(icahost.NewIBCModule(app.ICAHostKeeper), app.IBCFeeKeeper)
 
+	// IBC/go v8.3.1
+	app.ICAHostKeeper.WithQueryRouter(app.GRPCQueryRouter())
+
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter().
 		AddRoute(ibctransfertypes.ModuleName, transferIBCModule).
